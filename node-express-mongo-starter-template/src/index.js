@@ -8,8 +8,8 @@ const config = require("./config/config");
 
 //Setting up express
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '10mb' })); 
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 //Setting up Mongoose
 mongoose.connect(config.MONGODB_URL, {
@@ -24,7 +24,9 @@ db.once("open", () => {
 
 //Routes
 const appRoutes = require("./routes/app.route")
-app.use("/", appRoutes)
+const userRoutes = require("./routes/user.route")
+app.use("/api/v1/", appRoutes)
+app.use("/api/v1/", userRoutes)
 
 //Server Listening
 app.listen(config.PORT, () => {
