@@ -30,10 +30,10 @@ const createQuestion = () => {
   }
 
   return {
-    num1: num1.toString(),       
-    num2: num2.toString(),     
+    num1: num1.toString(),
+    num2: num2.toString(),
     operation,
-    correctAnswer: correctAnswer.toString(), 
+    correctAnswer: correctAnswer.toString(),
     options: getOptions(correctAnswer.toString())
   };
 };
@@ -46,6 +46,8 @@ const Quiz = () => {
   const [timeLeft, setTimeLeft] = useState(30);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
   const timerRef = useRef(null);
+
+  const token = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).token : null;
 
   // Start timer for each question
   useEffect(() => {
@@ -92,7 +94,7 @@ const Quiz = () => {
   };
 
   const handleNext = () => {
-    if (currentQuestionIndex < 9) { 
+    if (currentQuestionIndex < 9) {
       setCurrentQuestionIndex(prev => prev + 1);
       setTimeLeft(30);
     } else {
@@ -116,10 +118,7 @@ const Quiz = () => {
       correct,
       wrong,
       notAnswered,
-      questions: questions.map((
-        question,
-        index
-      ) => ({
+      questions: questions.map((question, index) => ({
         ...question,
         userAnswer: answers[index]
       }))
@@ -136,38 +135,40 @@ const Quiz = () => {
       {!isQuizStarted ? (
         <>
           <h2>Are You Ready For the Quiz?</h2>
-          <button onClick={startQuiz} className="start-button">Start Quiz</button>
+          <button onClick={startQuiz} className="start-button" disabled={!token} style={{ backgroundColor: !token ? "grey" : "success" }}>
+            Start Quiz
+          </button>
         </>
       ) : (
         <>
           <h2>Quiz</h2>
           {currentQuestionIndex < 10 && result === null && ( // Do not display last question if results are being shown
             <form onSubmit={handleSubmit}>
-              <div key={currentQuestionIndex} >
-                <div className="question-statement d-flex" style={{alignItems: 'center', gap:"15px" ,padding:"20px"}}>
-                <strong style={{fontSize:"18px"}}>Question {currentQuestionIndex + 1}:</strong>
-                <div className="question-fields">
-                  <input
-                    type="text"
-                    value={questions[currentQuestionIndex]?.num1}
-                    readOnly
-                    className="question-field"
-                  />
-                  <input
-                    type="text"
-                    value={questions[currentQuestionIndex]?.operation}
-                    readOnly
-                    className="question-field"
-                  />
-                  <input
-                    type="text"
-                    value={questions[currentQuestionIndex]?.num2}
-                    readOnly
-                    className="question-field"
-                  />
+              <div key={currentQuestionIndex}>
+                <div className="question-statement d-flex" style={{ alignItems: 'center', gap: "15px", padding: "20px" }}>
+                  <strong style={{ fontSize: "18px" }}>Question {currentQuestionIndex + 1}:</strong>
+                  <div className="question-fields">
+                    <input
+                      type="text"
+                      value={questions[currentQuestionIndex]?.num1}
+                      readOnly
+                      className="question-field"
+                    />
+                    <input
+                      type="text"
+                      value={questions[currentQuestionIndex]?.operation}
+                      readOnly
+                      className="question-field"
+                    />
+                    <input
+                      type="text"
+                      value={questions[currentQuestionIndex]?.num2}
+                      readOnly
+                      className="question-field"
+                    />
+                  </div>
                 </div>
-                </div>
-                
+
                 {questions[currentQuestionIndex]?.options.map(option => (
                   <label key={option} className={`option ${answers[currentQuestionIndex] === option
                     ? (option === questions[currentQuestionIndex].correctAnswer ? 'selected-correct' : 'selected-incorrect')

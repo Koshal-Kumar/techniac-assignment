@@ -9,8 +9,8 @@ import AppRoutes from "./routes/AppRoutes";
 const App = () => {
   return (
     <>
-      <ToastContainer />
       <AppRoutes />
+      <ToastContainer />
     </>
   );
 };

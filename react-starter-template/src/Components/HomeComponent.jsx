@@ -2,7 +2,7 @@ import React from "react";
 
 const HomeComponent = () => {
   return <>
-  
+{/*   
   <div className="body-container">
       <div className="page-width">
         <div className="header-container">
@@ -11,7 +11,7 @@ const HomeComponent = () => {
         
         
       </div>
-  </div>
+  </div> */}
   </>
  ;
 };

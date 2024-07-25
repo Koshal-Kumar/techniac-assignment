@@ -2,15 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css"; // Import the CSS file for styling
 
-const Header = ({ user }) => {
+const Header = () => {
   const navigate = useNavigate();
-
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
   };
 
-  const parsedUser = typeof user === "string" ? JSON.parse(user) : user;
+  const parsedUser = typeof user === "string" ? JSON.parse(user) : (user?user:'');
   const profilePictureBase64 = parsedUser?.data?.profilePicture;
 
   // Function to detect MIME type
